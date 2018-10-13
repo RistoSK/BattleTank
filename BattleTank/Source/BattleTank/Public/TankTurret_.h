@@ -19,7 +19,7 @@ public:
 	void Rotate(float RelativeSpeed);
 	
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float RotationDegree = 20;
 	
 };
