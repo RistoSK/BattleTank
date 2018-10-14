@@ -8,6 +8,7 @@
 
 // Forward declarations
 class UTankBarrel;
+class UTankMovementComponent;
 class UTankAimingComponent;
 class UTankTurret_;
 class AProjectile;
@@ -45,7 +46,7 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(EditDefaultsOnly)

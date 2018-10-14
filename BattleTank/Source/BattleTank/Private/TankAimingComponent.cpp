@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret_.h"
-#include "TankAimingComponent.h"
-
-
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()

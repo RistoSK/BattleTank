@@ -1,10 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TankBarrel.h"
 #include "TankTurret_.h"
-
-
-
+#include "TankBarrel.h"
 
 void UTankTurret_::Rotate(float RelativeSpeed) {
 
