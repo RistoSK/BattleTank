@@ -54,7 +54,7 @@ private:
 
 	UTankTurret_* Turret = nullptr;
 
-	double LastFireTime = 0;
+	bool IsBarrelMoving();
 
 	UPROPERTY(EditDefaultsOnly)
 		float ReloadTime = 3;
@@ -62,8 +62,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	FVector AimDirection;
+
+	double LastFireTime = 0;
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 		EFiringState FiringState = EFiringState::RELOADING;
+
 };
