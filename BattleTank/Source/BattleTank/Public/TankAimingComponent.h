@@ -9,6 +9,8 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+class AProjectile;
+
 UENUM()
 enum class EFiringState : uint8 { LOCKED, AIMING, RELOADING };
 
@@ -38,15 +40,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AimAt(FVector HitLocation);
 
+	UFUNCTION(BluePrintCallable)
+		void Fire();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
 
 private:
+
+	void MoveBarrel(FVector AimDirection);
+
 	UTankBarrel* Barrel = nullptr;
 
 	UTankTurret_* Turret = nullptr;
 
-	void MoveBarrel(FVector AimDirection);
+	double LastFireTime = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+		float ReloadTime = 3;
+
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 protected:
 
