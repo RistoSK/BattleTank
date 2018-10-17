@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/NavMovementComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/NavMovementComponent.h"
 #include "TankMovementComponent.generated.h"
@@ -18,14 +19,20 @@ class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 		
 
 public:
-	UFUNCTION(BlueprintCallable, Category = Input)
-	void IntendMoveForward(float Throw);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankTrack* LeftTrackToSet, UTankTrack* rightTrackToSet);
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+		void IntendMoveForward(float Throw);
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+		void IntendTurnRight(float Throw);
 
 private:
 	UTankTrack* LeftTrack = nullptr;
 	UTankTrack* RightTrack = nullptr;
 
+	// TODO check best protection
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 };

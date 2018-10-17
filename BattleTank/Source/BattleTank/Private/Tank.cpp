@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankTurret_.h"
@@ -13,9 +12,6 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	// No need to protext points as added at construction
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-
 }
 
 // Called when the game starts or when spawned
@@ -25,36 +21,30 @@ void ATank::BeginPlay()
 	
 }
 
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
 void ATank::AimAt(FVector HitLocation) {
+	if (!ensure(TankAimingComponent)) { return; }
 
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 
 }
 
-void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
+void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret_ * TurretToSet) {
+
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
+
+	TankAimingComponent->Initialise(BarrelToSet, TurretToSet);
 	Barrel = BarrelToSet;
+
 }
 
-void ATank::SetTurretReference(UTankTurret_* TurretToSet)
-{
-	TankAimingComponent->SetTurretReference(TurretToSet);
-}
 
 void ATank::Fire() {
-	UE_LOG(LogTemp, Warning, TEXT("fire!!!"));
+
+	if (!ensure(Barrel)) { return; }
 
 	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
 
-	if (Barrel && IsReloaded) { 
+	if (ensure(IsReloaded)) { 
 
 	auto BarrelRotator = Barrel->GetSocketRotation(FName("Projectile"));
 	auto BarrelLocation = Barrel->GetSocketLocation(FName("Projectile"));

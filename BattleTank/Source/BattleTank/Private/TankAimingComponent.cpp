@@ -32,21 +32,17 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	if (!BarrelToSet) { return; }
-	Barrel = BarrelToSet;
-}
+void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret_ * TurretToSet) {
 
-void UTankAimingComponent::SetTurretReference(UTankTurret_ * TurretToSet)
-{
-	if (!TurretToSet) { return; }
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
+
+	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -62,7 +58,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 																		  0,
 																		  ESuggestProjVelocityTraceOption::DoNotTrace);
 
-	if (bHavingAimSolution) {
+	if (ensure(bHavingAimSolution)) {
 
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
@@ -74,6 +70,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 }
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
+
+	if (!ensure(Barrel && Turret)) { return; }
 
 	// Work-out difference between current barrel rotation and AimDirection
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
