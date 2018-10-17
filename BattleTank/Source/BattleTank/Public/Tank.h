@@ -8,7 +8,6 @@
 
 // Forward declarations
 class UTankBarrel;
-class UTankAimingComponent;
 class UTankTurret_;
 class AProjectile;
 
@@ -21,8 +20,6 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void Initialise(UTankBarrel* BarrelToSet, UTankTurret_* TurretToSet);
 
@@ -31,10 +28,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
-
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
 	// Sets default values for this pawn's properties

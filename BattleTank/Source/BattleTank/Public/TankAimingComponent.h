@@ -26,17 +26,20 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void Initialise(UTankBarrel* BarrelToSet, UTankTurret_* TurretToSet);
-
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		void Initialise(UTankBarrel* BarrelToSet, UTankTurret_* TurretToSet);
+
 	UFUNCTION(BlueprintCallable)
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
 
 private:
 	UTankBarrel* Barrel = nullptr;
