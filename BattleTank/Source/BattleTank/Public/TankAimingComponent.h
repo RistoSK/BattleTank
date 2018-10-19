@@ -12,7 +12,7 @@
 class AProjectile;
 
 UENUM()
-enum class EFiringState : uint8 { LOCKED, AIMING, RELOADING };
+enum class EFiringState : uint8 { LOCKED, AIMING, RELOADING, OUT_OF_AMMO };
 
 // Forwards Decleration
 class UTankBarrel; 
@@ -43,8 +43,18 @@ public:
 	UFUNCTION(BluePrintCallable)
 		void Fire();
 
+	EFiringState GetFiringState() const;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	int GetRoundsLeft() const;
+
+protected:
+
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+		EFiringState FiringState = EFiringState::RELOADING;
 
 private:
 
@@ -66,9 +76,5 @@ private:
 
 	double LastFireTime = 0;
 
-protected:
-
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringState FiringState = EFiringState::RELOADING;
-
+	int RoundsLeft = 3;
 };
