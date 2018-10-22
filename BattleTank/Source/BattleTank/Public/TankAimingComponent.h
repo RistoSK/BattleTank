@@ -45,11 +45,8 @@ public:
 
 	EFiringState GetFiringState() const;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
-
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 protected:
 
@@ -60,21 +57,27 @@ private:
 
 	void MoveBarrel(FVector AimDirection);
 
-	UTankBarrel* Barrel = nullptr;
-
-	UTankTurret_* Turret = nullptr;
-
 	bool IsBarrelMoving();
 
 	UPROPERTY(EditDefaultsOnly)
 		float ReloadTime = 3;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float LaunchSpeed = 4000; // TODO find sensible default, for now we use the value of 40 m/s
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 RoundsLeft = 3;
+
+	UTankBarrel* Barrel = nullptr;
+
+	UTankTurret_* Turret = nullptr;
 
 	FVector AimDirection;
 
 	double LastFireTime = 0;
 
-	int RoundsLeft = 3;
+	
 };
