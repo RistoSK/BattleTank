@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "UObject/Class.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/SceneComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "Engine/EngineTypes.h"
@@ -33,6 +36,8 @@ private:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* otherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	void OnTimerExpire();
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UStaticMeshComponent* CollisionMesh = nullptr;
 
@@ -45,6 +50,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		URadialForceComponent* ExplosionForce = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		float DestroyDelay = 10.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		float ProjectileDamage = 20.f;
+
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
 
+	FTimerHandle TimeHandler;
 };
