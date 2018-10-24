@@ -15,13 +15,19 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
 private:
+		UFUNCTION()
+		void OnPossessedTankDeath();
+
 		virtual void BeginPlay() override;
 
 		virtual void Tick(float DeltaTime) override;
 
+		virtual void SetPawn(APawn* InPawn) override;
+
 		// How close can the AI tank get
 		UPROPERTY(EditAnywhere)
 		float AcceptanceRadius = 9000;
+	
 };

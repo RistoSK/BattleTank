@@ -82,25 +82,25 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 																		  0,
 																		  0,
 																		  ESuggestProjVelocityTraceOption::DoNotTrace);
-
-	if (ensure(bHavingAimSolution)) {
+	// TODO having ensure will create error messages and small lag while running
+	if (!(bHavingAimSolution)) { return; }
 
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
 
 		MoveBarrel(AimDirection);
 
-	}
+	
 	// No solution is found
 }
 
-void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
+void UTankAimingComponent::MoveBarrel(FVector TargetAimDirection) {
 
 	if (!ensure(Barrel) || !ensure(Turret)) { return; }
 
-	// Work-out difference between current barrel rotation and AimDirection
+	// Work-out difference between current barrel rotation and TargetAimDirection
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
+	auto AimAsRotator = TargetAimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
