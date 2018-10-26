@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankTrack.h"
+#include "SpawnPoint.h"
+#include "SprungWheel.h"
 
 
 UTankTrack::UTankTrack() {
@@ -9,52 +11,40 @@ UTankTrack::UTankTrack() {
 
 }
 
-// Called when the game starts
-void UTankTrack::BeginPlay()
-{
-	Super::BeginPlay();
+TArray<ASprungWheel*> UTankTrack::GetWheels() const {
 
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+	TArray<ASprungWheel*> ResultArray;
+	TArray<USceneComponent*> Children;
 
+	GetChildrenComponents(true, Children);
+
+	for (USceneComponent* Child : Children) {
+		auto SpawnPointChild = Cast <USpawnPoint>(Child);
+		// Use continue because we are inside a for loop
+		if (!SpawnPointChild) { continue; }
+		AActor* SpawnedChild = SpawnPointChild->GetSpawnedActor();
+		auto SprungWheel = Cast<ASprungWheel>(SpawnedChild);
+
+		if (!SprungWheel) { continue; }
+		ResultArray.Add(SprungWheel);
+	}
+	return ResultArray;
 }
 
+void UTankTrack::DriveTrack(float CurrentThrottle) {
 
-void UTankTrack::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * otherComponent, FVector NormalImpulse, const FHitResult & Hit) {
+	auto ForceApplied = CurrentThrottle * TrackMaxDrivingForce;
+	auto Wheels = GetWheels();
+	auto ForcePerWheel = ForceApplied / Wheels.Num();
+	for (ASprungWheel* Wheel : Wheels) {
+		Wheel->AddDrivingForce(ForcePerWheel);
+	}
 
-	DriveTrack();
-	ApplySidewaysForce();
-
-	CurrentThrottle = 0;
-}
-
-void UTankTrack::DriveTrack() {
-
-	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
-}
-
-void UTankTrack::ApplySidewaysForce()
-{
-	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-
-	// Work-out the required acceleration  this frame to correct, we need minus cause we the correction is on the opposite direction of the slippage
-	auto DeltaTime = GetWorld()->GetDeltaSeconds();
-	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector();
-
-	// Calculate and apply sideways for (F = m a)
-	// TankBP      Tank(SceneComponent without the Cast)
-	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-	// Diveded by two because we have 2 tracks in our tank
-	auto CorrectionForce = (TankRoot->GetMass() * CorrectionAcceleration) / 2;
-
-	TankRoot->AddForce(CorrectionForce);
 }
 
 void UTankTrack::SetThrottle(float Throttle) {
 
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
-
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
+	DriveTrack(CurrentThrottle);
 }
 

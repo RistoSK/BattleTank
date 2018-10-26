@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/SceneComponent.h"
 #include"GameFramework/Actor.h"
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
@@ -28,14 +29,7 @@ public:
 
 private:
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* otherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	TArray<class ASprungWheel*> GetWheels() const;
 
-	virtual void BeginPlay() override;
-
-	void ApplySidewaysForce();
-
-	void DriveTrack();
-
-	float CurrentThrottle = 0;
+	void DriveTrack(float CurrentThrottle);
 };
