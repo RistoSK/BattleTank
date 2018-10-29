@@ -2,11 +2,15 @@
 
 #pragma once
 
+#include "Engine/World.h"
+#include "Math/Vector.h"
+#include "EngineUtils.h"
 #include "CoreMinimal.h"
 #include "TankPlayerController.h"
 #include "GameFramework/Actor.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"
+
 
 /**
  * 
@@ -15,6 +19,7 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
+
 
 private:
 		UFUNCTION()
@@ -28,6 +33,7 @@ private:
 
 		// How close can the AI tank get
 		UPROPERTY(EditAnywhere)
-		float AcceptanceRadius = 9000;
-	
+		float AcceptanceRadius = 4000;
+
+		TArray<APawn*> AllTanks;
 };

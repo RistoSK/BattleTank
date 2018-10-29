@@ -78,6 +78,4 @@ private:
 	FVector AimDirection;
 
 	double LastFireTime = 0;
-
-	
 };

@@ -25,7 +25,7 @@ public:
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintPure, Category = "Health")
-		FColor GetHealthBarColor() const;
+	FColor GetHealthBarColor() const;
 
 	FTankDelegate OnDeath;
 
@@ -38,7 +38,6 @@ private:
 
 	UPROPERTY(Editanywhere, Category = "Health")
 		int32 StartingHealth = 100;
-
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
 		int32 CurrentHealth;

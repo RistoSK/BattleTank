@@ -2,17 +2,6 @@
 
 #include "Tank.h"
 
-float ATank::GetHealthPercent() const
-{
-	return (float)CurrentHealth / (float)StartingHealth;
-
-}
-
-FColor ATank::GetHealthBarColor() const
-{
-	return HealthBarColor;
-
-}
 
 // Sets default values
 ATank::ATank()
@@ -23,6 +12,14 @@ ATank::ATank()
 void ATank::BeginPlay() {
 	Super::BeginPlay();
 	CurrentHealth = StartingHealth;
+}
+
+float ATank::GetHealthPercent() const {
+	return (float)CurrentHealth / (float)StartingHealth;
+}
+
+FColor ATank::GetHealthBarColor() const {
+	return HealthBarColor;
 }
 
 float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
